@@ -1,0 +1,749 @@
+<title>Quantum Leap Into Abundance</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
+
+<!--
+  ============================================================
+  kamalikumanan.com/checkout  ·  Quantum Leap Into Abundance
+  Fleet to Glory Ltd · Sales + cart page · Built 17 Oct 2026
+  ============================================================
+  DEPLOY NOTES (GoHighLevel)
+  1. Paste into a full-width Custom Code / HTML element on a
+     blank funnel step at /checkout. All CSS + JS is inline.
+     In GHL set the row/section to Full Width and clear its own
+     padding, or the builder's container will box this page in
+     and the cream/black bands will stop short of the edges.
+     Content column width is --shell at the top of the CSS.
+  2. Both photos are embedded in this file as base64 data URIs
+     (portrait 560x653, stage 800x1000, ~214 KB of markup total).
+     Nothing external to host or hotlink; they render anywhere,
+     offline included. To swap a photo, replace the whole
+     src="data:image/jpeg;base64,..." value for that <img>.
+  3. CHECKOUT LINKS: edit the CHECKOUT block at the top of the
+     script. Both payment-link IDs are already in place; only the
+     domain needs filling in — payment links are served from
+     fastpaydirect.com, so the full URL looks like
+     https://fastpaydirect.com/6ad3322ec0e70c7fefb75363
+     Copy each one from Payments > Payment Links rather than
+     typing it. Until then the button refuses to navigate and
+     says so on the page. No card data ever touches this page.
+     NOTE: fastpaydirect.com is a different domain, so Meta's
+     _fbp/_fbc cookies do not exist there. The order-confirmed
+     page MUST be back on kamalikumanan.com or Purchase
+     tracking cannot work.
+  4. Meta Pixel: base code goes in Settings > Tracking Code >
+     Header (funnel-wide), firing PageView only — one copy, or
+     PageView reports as a Custom event.
+     DELETE GHL's native Edit Event config: if it fires its own
+     InitiateCheckout alongside this page's, the two are both
+     browser-side with different ids and will NOT deduplicate.
+     This page fires InitiateCheckout with an explicit eventID.
+     Purchase belongs on /welcome, never here.
+  5. Everything marked .todo is unconfirmed — search "todo"
+     and clear every one before going live.
+  6. Countdown is hard-coded to real timestamps below, not an
+     evergreen timer. Bonus close: Thu 22 Oct 15:00 UK (BST).
+     Doors close: Sat 31 Oct 23:59 UK (GMT, clocks change 25th).
+  ============================================================
+-->
+
+<style>
+/* Layout: full-bleed bands edge to edge, content spanning the viewport with a
+   fluid gutter; prose blocks stay at a readable measure. Sticky deadline band
+   above, mobile price rail below; gold hairlines carry the rhythm. */
+:root{
+  /* Backgrounds always run edge to edge. --shell caps the CONTENT column
+     inside them. Raise it if you ever want the content wider. */
+  --shell:980px;
+  --gutter:clamp(16px,3vw,32px);
+  --measure:64ch;
+  --ink:#16140F;
+  --ink-soft:#574F43;
+  --cream:#FFFCF5;
+  --parchment:#F7EEDC;
+  --parchment-2:#FBF6EA;
+  --gold:#A8803C;
+  --gold-lit:#D9B26A;
+  --line:#E9DCC2;
+  --white:#FFFFFF;
+  --alert:#A61B24;
+  --good:#2E6A45;
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+/* Full-bleed guarantee: every band spans the viewport, and nothing is allowed
+   to push the page wider than the screen (which would cut the bands short). */
+html{width:100%;overflow-x:clip}
+section,header,footer,.band,.hero,.about,.close-sec{width:100%}
+body{
+  margin:0;
+  width:100%;
+  max-width:100%;
+  overflow-x:clip;
+  font-family:var(--body);
+  font-size:16.5px;
+  line-height:1.6;
+  color:var(--ink);
+  background:var(--cream);
+  -webkit-font-smoothing:antialiased;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ink)}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.1;text-wrap:balance;margin:0}
+p{margin:0}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+
+.wrap{width:100%;max-width:var(--shell);margin-inline:auto;
+  padding-left:max(var(--gutter),env(safe-area-inset-left,0px));
+  padding-right:max(var(--gutter),env(safe-area-inset-right,0px))}
+.narrow{max-width:640px;margin-inline:auto}
+.mid{max-width:760px;margin-inline:auto}
+section{padding-block:clamp(36px,6vw,64px)}
+.tint{background:var(--parchment-2);border-block:1px solid var(--line)}
+
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:10px 16px;z-index:99}
+.skip:focus{left:8px;top:8px}
+
+/* ---------- deadline band ---------- */
+.band{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--ink);color:#F3E7CE}
+.band .wrap{padding-block:9px;display:flex;gap:8px;justify-content:center;align-items:center;
+  flex-wrap:wrap;font-size:13.5px;font-weight:500;text-align:center}
+.band strong{color:var(--gold-lit);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+
+/* ---------- hero ---------- */
+.hero{background:
+  radial-gradient(120% 90% at 18% 0%,var(--parchment) 0%,rgba(247,238,220,0) 62%),
+  linear-gradient(180deg,#FFFDF8 0%,var(--cream) 100%);
+  border-bottom:1px solid var(--line)}
+.hero .wrap{padding-block:clamp(26px,5vw,56px)}
+.hero-grid{display:grid;gap:clamp(22px,4vw,40px);align-items:center}
+@media (min-width:900px){.hero-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}}
+.eyebrow{font-size:11px;letter-spacing:.17em;font-weight:700;color:var(--gold);text-transform:uppercase;margin:0 0 12px}
+h1{font-size:clamp(31px,7.2vw,52px);letter-spacing:-.015em}
+h1 em{font-style:italic;font-weight:400;color:var(--gold)}
+.sub{font-family:var(--display);font-style:italic;font-size:clamp(17px,2.6vw,21px);line-height:1.45;color:var(--ink-soft);margin-top:14px;max-width:30ch}
+.rule{height:1px;background:var(--line);margin:18px 0;max-width:260px}
+.detail{font-size:14.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.micro{font-size:12.5px;color:var(--ink-soft);margin-top:10px}
+
+.btn{display:inline-block;border:0;cursor:pointer;text-decoration:none;text-align:center;
+  font-family:var(--body);font-weight:700;font-size:16px;letter-spacing:.01em;
+  background:var(--ink);color:#fff;padding:16px 32px;border-radius:999px;margin-top:20px;
+  transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 6px 18px rgba(22,20,15,.18)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(22,20,15,.24)}
+.btn-gold{background:var(--gold);color:#fff}
+
+.portrait{position:relative;width:min(280px,78vw);margin-inline:auto;aspect-ratio:6/7;
+  border-radius:150px 150px 20px 20px;overflow:hidden;border:5px solid #EBDCBB;
+  box-shadow:0 18px 44px rgba(120,90,40,.22);background:var(--parchment)}
+.portrait img{width:100%;height:100%;object-fit:cover;object-position:50% 22%}
+.ph{position:absolute;inset:0;display:grid;place-content:center;gap:4px;text-align:center;
+  padding:12px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);
+  background:repeating-linear-gradient(45deg,#F7EEDC,#F7EEDC 10px,#F2E5C9 10px,#F2E5C9 20px)}
+.ph small{display:block;margin-top:6px;font-size:9.5px;letter-spacing:.06em;text-transform:none;opacity:.8}
+
+/* ---------- blocks ---------- */
+h2{font-size:clamp(25px,4.2vw,34px);letter-spacing:-.01em;text-align:center}
+.lede{margin-top:16px;display:grid;gap:10px;text-align:center}
+.lede p{font-size:17px;line-height:1.62;max-width:560px;margin-inline:auto}
+.ctr{text-align:center}
+
+.cards{display:grid;gap:14px;margin-top:26px}
+@media (min-width:820px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.card{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--gold-lit);
+  border-radius:4px 4px 14px 14px;padding:20px;min-width:0}
+.card h3{font-size:19px;margin-bottom:8px}
+.card p{font-size:14.8px;line-height:1.55;color:var(--ink-soft)}
+.note{margin:24px auto 0;max-width:620px;text-align:center;font-size:16px;line-height:1.6;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+
+.gets{margin-top:24px;display:grid}
+.gets li{list-style:none;display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;
+  padding:14px 0;border-bottom:1px solid var(--line);font-size:16px;line-height:1.5}
+.gets li:first-child{border-top:1px solid var(--line)}
+.gets ul{margin:0;padding:0}
+.mark{color:var(--gold);font-size:15px;line-height:1.6}
+
+.weeks{display:grid;gap:12px;margin-top:24px}
+.wk{display:grid;grid-template-columns:96px 1fr;gap:16px;background:var(--white);
+  border:1px solid var(--line);border-radius:14px;padding:16px 18px;min-width:0}
+@media (max-width:480px){.wk{grid-template-columns:1fr;gap:4px}}
+.wk .n{font-size:11.5px;font-weight:700;color:var(--gold);letter-spacing:.11em;padding-top:4px}
+.wk .t{font-family:var(--display);font-weight:600;font-size:18px}
+.wk p{font-size:14.8px;color:var(--ink-soft);margin-top:3px}
+
+.todo{display:inline-block;background:#FDEBEC;color:var(--alert);border:1px dashed var(--alert);
+  font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  padding:3px 9px;border-radius:5px;margin-bottom:14px}
+
+/* ---------- value stack ---------- */
+.stack{max-width:660px;margin:24px auto 0;background:var(--white);border:1px solid var(--line);
+  border-radius:16px;overflow:hidden}
+.row{display:flex;justify-content:space-between;gap:16px;padding:14px 18px;
+  border-bottom:1px solid #F2EADB;font-size:15.3px;line-height:1.45}
+.row:last-child{border-bottom:0}
+.row .v{color:var(--gold);white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}
+.bonusgrp{background:var(--parchment-2);border-top:1px solid var(--line)}
+.bonusgrp .tag{display:block;padding:12px 18px 2px;font-size:10.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.closed .row{opacity:.5;text-decoration:line-through}
+.closed .tag{text-decoration:none;opacity:1;color:var(--ink-soft)}
+.closed-note{display:none;padding:10px 18px 14px;font-size:13.5px;color:var(--ink-soft)}
+.closed .closed-note{display:block}
+
+/* ---------- price ---------- */
+.price{max-width:660px;margin-inline:auto;background:var(--ink);color:#F0E9DC;
+  border-radius:22px;padding:clamp(26px,5vw,38px) clamp(18px,4vw,32px);text-align:center}
+.price .was{font-size:15.5px;color:#A79C8A;text-decoration:line-through;font-variant-numeric:tabular-nums}
+.price .amt{font-family:var(--display);font-size:clamp(50px,12vw,66px);font-weight:600;
+  color:var(--gold-lit);line-height:1.05;margin-top:4px;font-variant-numeric:tabular-nums}
+.price .alt{font-size:14.5px;color:#D8CFBE;margin-top:6px}
+.price .why{font-size:14.5px;color:#A79C8A;max-width:430px;margin:16px auto 0;line-height:1.55}
+.pbtns{display:grid;gap:10px;margin-top:22px}
+@media (min-width:640px){.pbtns{grid-template-columns:1fr 1fr}}
+.pbtn{display:block;text-decoration:none;text-align:center;font-weight:700;font-size:15.5px;
+  padding:16px 12px;border-radius:12px;background:var(--gold-lit);color:#16140F;
+  transition:filter .15s ease}
+.pbtn.alt2{background:transparent;color:#F0E9DC;border:1.5px solid #4B463C}
+.pbtn:hover{filter:brightness(1.06)}
+
+.guarantee{max-width:620px;margin-inline:auto;text-align:center;border:2px dashed var(--gold-lit);
+  border-radius:18px;padding:clamp(22px,4vw,30px);background:var(--white)}
+.guarantee p{margin-top:12px;font-size:16.5px;line-height:1.6;color:var(--ink-soft)}
+
+/* ---------- quotes ---------- */
+.quotes{display:grid;gap:14px;margin-top:26px}
+@media (min-width:820px){.quotes{grid-template-columns:repeat(3,minmax(0,1fr))}}
+figure.q{margin:0;background:var(--white);border:1px solid var(--line);border-radius:16px;
+  padding:20px;min-width:0;display:flex;flex-direction:column;gap:12px}
+figure.q blockquote{margin:0;font-family:var(--display);font-size:16.3px;line-height:1.48}
+figure.q figcaption{font-size:11.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--gold);margin-top:auto}
+
+/* ---------- about ---------- */
+.about{background:var(--ink);color:#E2DACC}
+.about .wrap{padding-block:clamp(36px,6vw,64px)}
+.about-grid{display:grid;gap:clamp(20px,4vw,36px);align-items:center}
+@media (min-width:900px){.about-grid{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}}
+.shot{position:relative;aspect-ratio:4/5;max-width:100%;border-radius:16px;overflow:hidden;background:#241F18}
+.shot img{width:100%;height:100%;object-fit:cover}
+.shot .ph{background:repeating-linear-gradient(45deg,#241F18,#241F18 10px,#2B251C 10px,#2B251C 20px);color:var(--gold-lit)}
+.about h2{color:#fff;text-align:left}
+.about-copy{display:grid;gap:12px;margin-top:16px}
+.about-copy p{font-size:16.3px;line-height:1.62}
+.sig{font-family:var(--display);font-style:italic;color:var(--gold-lit);font-size:17px}
+
+/* ---------- fit ---------- */
+.fit{display:grid;gap:14px;max-width:760px;margin:26px auto 0}
+@media (min-width:700px){.fit{grid-template-columns:1fr 1fr}}
+.fit div{border-radius:14px;padding:18px;font-size:15.3px;line-height:1.55;min-width:0}
+.fit h3{font-size:15px;font-family:var(--body);font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;margin-bottom:8px}
+.yes{background:#EDF4EC;border:1px solid #CFE2CE}.yes h3{color:var(--good)}
+.no{background:#FAEFEF;border:1px solid #EBD4D4}.no h3{color:var(--alert)}
+
+/* ---------- faq ---------- */
+.faq{max-width:700px;margin:24px auto 0}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:16px 34px 16px 0;position:relative;
+  font-weight:600;font-size:16px;line-height:1.4}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:14px;font-size:21px;
+  color:var(--gold);font-weight:400;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq .a{padding:0 0 16px;font-size:15.5px;line-height:1.6;color:var(--ink-soft)}
+
+/* ---------- order ---------- */
+.close-sec{background:var(--parchment);border-top:1px solid var(--line)}
+.order{max-width:540px;margin:26px auto 0;background:var(--white);border:1px solid var(--line);
+  border-radius:20px;padding:clamp(20px,4vw,28px);box-shadow:0 16px 44px rgba(120,90,40,.14)}
+.order h3{font-size:22px;text-align:center;margin-bottom:6px}
+.order .osub{text-align:center;font-size:13.5px;color:var(--ink-soft);margin-bottom:18px;
+  font-variant-numeric:tabular-nums}
+.field{display:grid;gap:5px;margin-bottom:12px}
+.field label{font-size:12.5px;font-weight:600;letter-spacing:.04em;color:var(--ink-soft)}
+.field input{font:inherit;font-size:16px;padding:13px 13px;border:1.5px solid #DCCFB7;
+  border-radius:10px;background:#FFFDF7;color:var(--ink);width:100%}
+.field input:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px rgba(168,128,60,.18)}
+fieldset{border:0;padding:0;margin:4px 0 12px;min-width:0}
+legend{font-size:12.5px;font-weight:600;letter-spacing:.04em;color:var(--ink-soft);padding:0 0 6px}
+.opt{display:flex;align-items:center;gap:12px;border:2px solid #DCCFB7;border-radius:12px;
+  padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .15s ease,background .15s ease}
+.opt:has(input:checked){border-color:var(--gold);background:#FBF5E8}
+.opt input{accent-color:var(--gold);width:18px;height:18px;flex:none}
+.opt .ol{flex:1;min-width:0;font-weight:600;font-size:15.3px}
+.opt .os{display:block;font-weight:400;font-size:12.8px;color:var(--ink-soft)}
+.opt .op{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.mount{border:1.5px dashed #CFC0A4;border-radius:12px;padding:16px;background:#FDFAF2;
+  font-size:13px;line-height:1.5;color:var(--ink-soft);margin-bottom:14px}
+.mount b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:3px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13.3px;line-height:1.45;
+  color:var(--ink-soft);margin-bottom:16px}
+.consent input{accent-color:var(--gold);width:17px;height:17px;flex:none;margin-top:2px}
+.pay{display:block;width:100%;border:0;cursor:pointer;text-decoration:none;text-align:center;
+  font-family:var(--body);font-weight:700;font-size:16.5px;padding:17px;border-radius:12px;
+  background:var(--ink);color:#fff;transition:background .15s ease}
+.pay:hover{background:#000}
+.secure{text-align:center;font-size:12px;color:var(--ink-soft);margin-top:12px;line-height:1.5}
+.nextstep{text-align:center;font-size:12.5px;color:var(--gold);margin-top:8px;font-weight:600}
+.linkwarn{margin-top:14px;padding:13px 15px;border-radius:10px;background:#FDEBEC;
+  border:1px solid #EBD4D4;font-size:13.5px;line-height:1.5;color:var(--alert)}
+
+/* ---------- mobile rail ---------- */
+.rail{position:fixed;left:0;right:0;bottom:0;z-index:45;background:var(--ink);color:#fff;
+  display:flex;align-items:center;gap:12px;
+  padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  transform:translateY(110%);transition:transform .22s ease;box-shadow:0 -6px 24px rgba(0,0,0,.18)}
+.rail.show{transform:translateY(0)}
+.rail .rp{font-size:13px;line-height:1.3;color:#C7BCA7;min-width:0}
+.rail .rp b{display:block;color:#fff;font-size:15.5px;font-variant-numeric:tabular-nums}
+.rail a{margin-left:auto;background:var(--gold-lit);color:#16140F;font-weight:700;font-size:14.5px;
+  padding:13px 20px;border-radius:999px;text-decoration:none;white-space:nowrap}
+@media (min-width:900px){.rail{display:none}}
+
+footer{background:var(--ink);color:#938A79;text-align:center}
+footer .wrap{padding-block:26px;display:grid;gap:10px}
+footer p{font-size:12.3px;line-height:1.65}
+footer a{color:#C7BCA7}
+.disc{max-width:620px;margin-inline:auto}
+.pad{height:76px}
+@media (min-width:900px){.pad{display:none}}
+</style>
+
+<a class="skip" href="#order">Skip to the order form</a>
+
+<!-- 2. DEADLINE BAND -->
+<div class="band" id="band">
+  <div class="wrap" aria-live="polite">
+    <span id="bandText">Fast-action bonuses end in</span> <strong id="cd">—</strong>
+  </div>
+</div>
+
+<!-- 1. HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">For workshop attendees · Doors close Saturday 31 October</p>
+      <h1>Quantum Leap Into <em>Abundance</em></h1>
+      <p class="sub">Six weeks, live with me. Clean the cup. Release the pattern. Manifest time, not just money.</p>
+      <div class="rule"></div>
+      <p class="detail">Starts Sunday 25 October · 4pm UK Time · Live online · $888, or 3 × $333</p>
+      <a class="btn" href="#order">Join the Program</a>
+      <p class="micro" id="heroMicro">Fast-action bonuses end Thursday 22 October, 4pm UK.</p>
+    </div>
+    <div class="portrait">
+      <img src="https://assets.cdn.filesafe.space/WKroanf4knQ0zo4ITQKU/media/6aa913aa196984c408f686dd.jpg" alt="Kamali Kumanan, founder of Fleet to Glory" loading="eager" fetchpriority="high" referrerpolicy="no-referrer" data-ph>
+    </div>
+  </div>
+</header>
+
+<!-- 3. THIS IS FOR YOU IF -->
+<section>
+  <div class="wrap narrow">
+    <h2>You did the work. You're still stuck.</h2>
+    <div class="lede">
+      <p>You've done the vision boards. The affirmations. The journaling.</p>
+      <p>You've read the books. Maybe taken a course or two.</p>
+      <p>And you're still waiting.</p>
+      <p><strong>It's not your fault. Nobody taught you the first step.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. WHAT YOU LEARNED IN THE WORKSHOP -->
+<section class="tint">
+  <div class="wrap">
+    <h2>You now know the what.</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>Clean the cup</h3>
+        <p>Affirmations can't work on top of old anger and old hurt. Forgiveness comes first.</p>
+      </article>
+      <article class="card">
+        <h3>Release comparison. Remove doubt.</h3>
+        <p>Jealousy is the biggest block I see. Doubt is the brake.</p>
+      </article>
+      <article class="card">
+        <h3>Manifest time, not just money</h3>
+        <p>Give your wish a time. Let the years compress.</p>
+      </article>
+    </div>
+    <p class="note">Most people stop here. They leave inspired. Then Monday comes and the old pattern wins. I knew these techniques for years and still did them wrong. <strong>Knowing isn't doing.</strong></p>
+    <p class="ctr"><a class="btn" href="#order">I'm Ready. Show Me How.</a></p>
+  </div>
+</section>
+
+<!-- 5. WHAT CHANGES FOR YOU -->
+<section>
+  <div class="wrap narrow">
+    <h2>In six weeks, you'll walk away with</h2>
+    <div class="gets">
+      <ul>
+        <li><span class="mark" aria-hidden="true">✦</span><span>A clean cup. Forgiveness and inner-child practices that clear what you've been carrying.</span></li>
+        <li><span class="mark" aria-hidden="true">✦</span><span>Affirmations written for you, by you. Not borrowed ones that never felt true.</span></li>
+        <li><span class="mark" aria-hidden="true">✦</span><span>Belief you can feel. You'll learn to spot the signs and remove the doubt.</span></li>
+        <li><span class="mark" aria-hidden="true">✦</span><span>Your 3-month, 1-year and 5-year plan, and the action that makes it real.</span></li>
+        <li><span class="mark" aria-hidden="true">✦</span><span>Techniques you'll keep for the rest of your life.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 6. WEEK BY WEEK -->
+<section class="tint">
+  <div class="wrap mid">
+    <h2>How the six weeks work</h2>
+    <div class="weeks">
+      <div class="wk"><div class="n">WEEKS 1–2</div><div><div class="t">CLEAR</div><p>Find what you've been carrying. Forgiveness, inner child, ho'oponopono.</p></div></div>
+      <div class="wk"><div class="n">WEEK 3</div><div><div class="t">ALIGN</div><p>Meet your highest self. Write your own affirmations.</p></div></div>
+      <div class="wk"><div class="n">WEEK 4</div><div><div class="t">BELIEVE</div><p>Remove doubt. Read the signs. Gratitude that works.</p></div></div>
+      <div class="wk"><div class="n">WEEKS 5–6</div><div><div class="t">LEAP</div><p>Manifest time. Your 3-month, 1-year and 5-year plan. Action.</p></div></div>
+    </div>
+    <p class="note">Live sessions on Sundays from 25 October, 4pm UK. Replays of every session.</p>
+  </div>
+</section>
+
+<!-- 7 + 8. EVERYTHING INCLUDED + BONUSES -->
+<section>
+  <div class="wrap">
+    <h2>Everything you get</h2>
+    <div class="stack" id="stack">
+      <div class="row"><span>6 live coaching sessions with me</span><span class="v">$2,997</span></div>
+      <div class="row"><span>The Quantum Leap Method curriculum and weekly worksheets</span><span class="v">$997</span></div>
+      <div class="row"><span>Guided audio activations: highest self, ho'oponopono, visualisation</span><span class="v">$497</span></div>
+      <div class="row"><span>Private community and weekly accountability</span><span class="v">$997</span></div>
+      <div class="row"><span>Live full-moon manifestation ritual</span><span class="v">$297</span></div>
+      <div class="bonusgrp" id="bonuses">
+        <span class="tag" id="bonusTag">Join by Thursday 22 October, 3pm UK and you also get</span>
+        <div class="row"><span>Manifest Your Person relationship masterclass</span><span class="v">$497</span></div>
+        <div class="row"><span>Water and Doorway Rituals quick-start guides</span><span class="v">$197</span></div>
+        <div class="row"><span>Future-Self Letter template. I wrote one on a flight home, from my future self to me.</span><span class="v">$97</span></div>
+        <p class="closed-note">These bonuses have now closed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. PRICE -->
+<section class="tint">
+  <div class="wrap">
+    <div class="price">
+      <p class="was">Total value: <span id="totalValue">$6,576</span></p>
+      <p class="amt">$888</p>
+      <p class="alt">or 3 monthly payments of $333 (total $999) · VAT included · USD</p>
+      <p class="why">In the past I worked with a small group of clients. This is the first time I'm opening it up to more people.</p>
+      <div class="pbtns">
+        <a class="pbtn" href="#order" data-plan="full" id="pbtnFull">Pay in Full: $888</a>
+        <a class="pbtn alt2" href="#order" data-plan="plan" id="pbtnPlan">3 Payments of $333</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. GUARANTEE -->
+<section>
+  <div class="wrap">
+    <div class="guarantee">
+      <h2>My promise to you</h2>
+      <p>Show up to the live sessions. Do the work. Ask your questions. If you don't see a change, join the next cohort free.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 11. IN THEIR WORDS -->
+<section class="tint">
+  <div class="wrap">
+    <h2>In their words</h2>
+    <div class="quotes">
+      <figure class="q">
+        <blockquote>It was more than just a webinar. It gave me an opportunity to pause, reconnect with myself, and think about what I truly want to create in my life.</blockquote>
+        <figcaption>R. Kinha</figcaption>
+      </figure>
+      <figure class="q">
+        <blockquote>Kamali made me remember my inner child. She took me back to the "happy" me by reminding me to keep my promise to myself.</blockquote>
+        <figcaption>Helen R.</figcaption>
+      </figure>
+      <figure class="q">
+        <blockquote>She is a role model, whatever you experienced in your past, leading you on the path for your personal transformation to your best personal self.</blockquote>
+        <figcaption>Dr. Fabian A.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 12. WHO I AM -->
+<section class="about">
+  <div class="wrap about-grid">
+    <div class="shot">
+      <img src="https://assets.cdn.filesafe.space/WKroanf4knQ0zo4ITQKU/media/6ac3d94ea20d6ea641d82120.jpg" alt="Kamali Kumanan speaking on stage" loading="lazy" referrerpolicy="no-referrer" data-ph>
+    </div>
+    <div class="about-text">
+      <h2>I didn't learn this from a book.</h2>
+      <div class="about-copy">
+        <p>For almost 20 years, my husband and I did everything "right." 12-hour days. Six days a week. We grew. Slowly.</p>
+        <p>Then one of our businesses received a closure notice. I found myself in the darkest place.</p>
+        <p>I had studied psychology and sociology. I had coached many people. Knowing it didn't heal me.</p>
+        <p>So I healed first. Forgiveness. Letting go. Then I started manifesting properly. The last 3 years changed more than the 20 before them.</p>
+        <p>Now I'm teaching you exactly what I did.</p>
+        <p class="sig">Kamali Kumanan · Founder, Fleet to Glory</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 13. HONEST EXPECTATIONS -->
+<section>
+  <div class="wrap">
+    <h2>What to expect in six weeks</h2>
+    <div class="lede narrow">
+      <p>If you do the practices, you'll start to see small changes. Small changes are how big ones begin.</p>
+      <p>I won't promise you a fortune in six weeks. Anyone who does isn't being honest with you.</p>
+      <p>I promise you the techniques that worked for me and my clients, and my support while you learn them.</p>
+    </div>
+    <div class="fit">
+      <div class="yes">
+        <h3>For you if</h3>
+        You've done the work and you're still stuck. You're willing to do the practices. You're ready to stop waiting years.
+      </div>
+      <div class="no">
+        <h3>Not for you if</h3>
+        You want a million in six weeks without doing anything.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 14. FAQ -->
+<section class="tint">
+  <div class="wrap">
+    <h2>Questions</h2>
+    <div class="faq">
+      <details open><summary>When are the live sessions?</summary><p class="a">Sundays at 4pm UK, starting 25 October. The six dates are 25 October, then 1, 8, 15, 22 and 29 November.</p></details>
+      <details><summary>What if I miss a session?</summary><p class="a">Every session is recorded. You'll get the replay.</p></details>
+      <details><summary>How much time do I need?</summary><p class="a">One live session a week, plus short daily practices.</p></details>
+      <details><summary>I've tried everything. Why would this be different?</summary><p class="a">Because you've been pouring into a dirty cup. Week 1 starts with the cup.</p></details>
+      <details><summary>Is this religious?</summary><p class="a">Some practices come from my culture, but they work for everyone, whatever you believe.</p></details>
+      <details><summary>What if I don't fully believe yet?</summary><p class="a">You don't need to. You need to be willing.</p></details>
+      <details><summary>Can I pay monthly?</summary><p class="a">Yes. Three monthly payments of $333, taken on the day you join and then monthly. That comes to $999 in total, compared with $888 if you pay in full today.</p></details>
+      <details><summary>What if it doesn't work for me?</summary><p class="a">Show up, do the work, ask your questions. If you don't see a change, join the next cohort free.</p></details>
+      <details><summary>When do I get access?</summary><p class="a">Straight after you join. You'll get a welcome email with the community link, your worksheets and the session dates.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 15. FINAL CLOSE + ORDER FORM -->
+<section class="close-sec" id="order">
+  <div class="wrap">
+    <h2>You came here with a dirty cup. You're leaving knowing how to clean it.</h2>
+    <div class="lede narrow">
+      <p>The question is whether you clean it alone, or with me. Every human being deserves to live their happiest life. You have a superpower. I want to be the person who unlocks it.</p>
+    </div>
+    <p class="note" id="deadlineLine" style="font-size:13.5px">We start Sunday 25 October · Fast-action bonuses end Thursday 22 October, 3pm UK · Doors close Saturday 31 October</p>
+
+    <div class="order">
+      <h3>Join Quantum Leap Into Abundance</h3>
+      <p class="osub">Six weeks live, starting Sunday 25 October · 4pm UK</p>
+
+      <fieldset>
+        <legend>Choose how you'd like to pay</legend>
+        <label class="opt" for="payFull">
+          <input type="radio" id="payFull" name="pay" value="full" checked>
+          <span class="ol">Pay in full<span class="os">One payment, nothing further</span></span>
+          <span class="op">$888</span>
+        </label>
+        <label class="opt" for="payPlan">
+          <input type="radio" id="payPlan" name="pay" value="plan">
+          <span class="ol">3 monthly payments<span class="os">$333 today, then monthly ($999 total)</span></span>
+          <span class="op">$333</span>
+        </label>
+      </fieldset>
+
+      <a class="pay" id="payBtn" href="#">Continue to Secure Checkout — $888</a>
+      <p class="secure">You'll enter your details and card on the next page. Secure checkout by GoHighLevel · VAT included · Welcome email within minutes.</p>
+      <p class="nextstep">Next: your details and payment, then straight into the community.</p>
+      <p class="linkwarn" id="linkWarn" hidden></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Fleet to Glory Ltd · <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a></p>
+    <p>Fleet to Glory Ltd, registered in England and Wales. Company no. 16241714 · Registered office: 144 Station Lane, Hornchurch, Essex, RM12 6LT, United Kingdom</p>
+    <p class="disc">Results vary from person to person and depend on your own effort. Nothing on this page is a promise of income or a guarantee of specific results. This site is not part of, or endorsed by, Meta.</p>
+  </div>
+</footer>
+
+<div class="pad"></div>
+
+<!-- mobile price rail -->
+<div class="rail" id="rail">
+  <div class="rp"><b>$888</b>or 3 × $333</div>
+  <a href="#order">Join the Program</a>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ====================================================================
+     CHECKOUT LINKS — the only thing to edit before going live.
+     Paste the FULL payment-link URL for each plan, exactly as the copy
+     button in Payments > Payment Links gives it. The GHL table shows
+     only the path (/6ad3322e...); the full link includes the domain.
+     ==================================================================== */
+  var CHECKOUT = {
+    full: "https://link.fastpaydirect.com/payment-link/6ad3322ec0e70c7fefb75363", // $888 pay in full
+    plan: "https://link.fastpaydirect.com/payment-link/6ad33251db15f6a453c8aaa8"  // 3 x $333
+  };
+
+  /* Real deadlines. UK is BST (UTC+1) until Sun 25 Oct 2026, GMT after. */
+  var BONUS_END   = Date.UTC(2026, 9, 22, 14, 0, 0);  // Thu 22 Oct 15:00 BST
+  var DOORS_CLOSE = Date.UTC(2026, 9, 31, 23, 59, 0); // Sat 31 Oct 23:59 GMT
+
+  var cd = document.getElementById("cd");
+  var bandText = document.getElementById("bandText");
+  var heroMicro = document.getElementById("heroMicro");
+  var bonuses = document.getElementById("bonuses");
+  var bonusTag = document.getElementById("bonusTag");
+  var totalValue = document.getElementById("totalValue");
+  var deadlineLine = document.getElementById("deadlineLine");
+  var phase = "";
+
+  function pad(n) { return n < 10 ? "0" + n : String(n); }
+
+  function format(ms) {
+    var s = Math.floor(ms / 1000);
+    var d = Math.floor(s / 86400); s -= d * 86400;
+    var h = Math.floor(s / 3600);  s -= h * 3600;
+    var m = Math.floor(s / 60);    s -= m * 60;
+    return (d > 0 ? d + "d " : "") + pad(h) + ":" + pad(m) + ":" + pad(s);
+  }
+
+  function setPhase(next) {
+    if (next === phase) return;
+    phase = next;
+    if (next === "bonus") return;
+
+    if (next === "final") {
+      bandText.textContent = "Doors close in";
+      heroMicro.textContent = "Doors close Saturday 31 October. Enrolment closes with them.";
+      bonuses.classList.add("closed");
+      bonusTag.textContent = "Fast-action bonuses";
+      totalValue.textContent = "$5,785";
+      deadlineLine.textContent = "We start Sunday 25 October · Doors close Saturday 31 October";
+    }
+
+    if (next === "closed") {
+      bandText.textContent = "Enrolment for this cohort has closed.";
+      cd.hidden = true;
+      heroMicro.textContent = "Enrolment has closed. Join the waitlist for the next cohort.";
+      bonuses.classList.add("closed");
+      bonusTag.textContent = "Fast-action bonuses";
+      totalValue.textContent = "$5,785";
+      deadlineLine.textContent = "Enrolment for this cohort has closed.";
+    }
+  }
+
+  function tick() {
+    var now = Date.now();
+    if (now < BONUS_END) {
+      setPhase("bonus");
+      cd.textContent = format(BONUS_END - now);
+    } else if (now < DOORS_CLOSE) {
+      setPhase("final");
+      cd.textContent = format(DOORS_CLOSE - now);
+    } else {
+      setPhase("closed");
+    }
+  }
+
+  tick();
+  setInterval(tick, 1000);
+
+  /* Price buttons preselect the matching payment option. */
+  var payFull = document.getElementById("payFull");
+  var payPlan = document.getElementById("payPlan");
+  var payBtn = document.getElementById("payBtn");
+
+  function syncButton() {
+    var plan = payPlan.checked ? "plan" : "full";
+    payBtn.textContent = payPlan.checked
+      ? "Continue to Secure Checkout — 3 × $333"
+      : "Continue to Secure Checkout — $888";
+    payBtn.href = CHECKOUT[plan];
+    payBtn.setAttribute("data-selected", plan);
+  }
+  payFull.addEventListener("change", syncButton);
+  payPlan.addEventListener("change", syncButton);
+  syncButton();
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-plan]"), function (el) {
+    el.addEventListener("click", function () {
+      (el.getAttribute("data-plan") === "plan" ? payPlan : payFull).checked = true;
+      syncButton();
+    });
+  });
+
+  /* NO PIXEL CALL HERE — deliberately.
+     InitiateCheckout is fired once on page view by the header tracking
+     code, which also owns its event id and the CAPI relay. Firing it
+     again on click would be a second browser event with a different id,
+     and Meta does not deduplicate browser against browser: both count. */
+  payBtn.addEventListener("click", function (ev) {
+    if (payBtn.href.indexOf("REPLACE-WITH-YOUR-GHL-DOMAIN") !== -1) {
+      ev.preventDefault();
+      alertInline("Checkout links aren't connected yet. Paste the two payment-link URLs into the CHECKOUT block at the top of the page script.");
+    }
+  });
+
+  function alertInline(text) {
+    var msg = document.getElementById("linkWarn");
+    if (!msg) return;
+    msg.hidden = false;
+    msg.textContent = text;
+  }
+
+  /* Mobile price rail: show once the hero scrolls away, hide over the order form. */
+  var rail = document.getElementById("rail");
+  var hero = document.querySelector(".hero");
+  var order = document.getElementById("order");
+  var pastHero = false, atOrder = false;
+
+  function syncRail() { rail.classList.toggle("show", pastHero && !atOrder); }
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (e) {
+      pastHero = !e[0].isIntersecting; syncRail();
+    }, { threshold: 0 }).observe(hero);
+
+    new IntersectionObserver(function (e) {
+      atOrder = e[0].isIntersecting; syncRail();
+    }, { threshold: 0 }).observe(order);
+  }
+
+  /* Image placeholders stay visible if the media hasn't been swapped in yet. */
+  Array.prototype.forEach.call(document.querySelectorAll("img[data-ph]"), function (img) {
+    function fail() { img.style.display = "none"; }
+    img.addEventListener("error", fail);
+    if (img.complete && img.naturalWidth === 0) fail();
+  });
+
+  /* GHL owns the real submission. This keeps the preview honest. */
+  document.getElementById("orderForm").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var msg = document.getElementById("formMsg");
+    msg.hidden = false;
+    msg.textContent = "Preview only — this form isn't connected yet. In GoHighLevel this button hands off to the secure checkout and fires the Purchase event on the onboarding page.";
+  });
+})();
+</script>
